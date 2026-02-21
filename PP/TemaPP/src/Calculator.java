@@ -19,6 +19,7 @@ public class Calculator extends JFrame {
             new JButton(" 7 "),
             new JButton(" 8 "),
             new JButton(" 9 ")
+
     };
 
     JButton operators[] = {
@@ -27,10 +28,13 @@ public class Calculator extends JFrame {
             new JButton(" * "),
             new JButton(" / "),
             new JButton(" = "),
-            new JButton(" C ")
+            new JButton(" C "),
+            new JButton(" )"),
+            new JButton(" ( ")
+
     };
 
-    String oper_values[] = {"+", "-", "*", "/", "=", ""};
+    String oper_values[] = {"+", "-", "*", "/", "=", "",")","("};
 
     String value;
     char operator;
@@ -38,23 +42,27 @@ public class Calculator extends JFrame {
     JTextArea area = new JTextArea(3, 5);
 
     public static void main(String[] args) {
-//        Calculator calculator = new Calculator();
-//        calculator.setSize(230, 200);
-//        calculator.setTitle(" Java-Calc-Extended, PP Lab1 ");
-//        calculator.setResizable(false);
-//        calculator.setVisible(true);
-//        calculator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Calculator calculator = new Calculator();
+        calculator.setSize(500, 500);
+        calculator.setTitle(" Java-Calc-Extended, PP Lab1 ");
+        calculator.setResizable(true);
+        calculator.setVisible(true);
+        calculator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        System.out.println(FormaPoloneza("1+2/2+(2-3*4)"));
+//        System.out.println(EvaluareExpresie(String.valueOf(FormaPoloneza("1+2/2+(2-3*4)"))));
 
 
     }
 
 
     /*
+        GradSemn(char var)
+        -return int
+
         Determina daca semnul extras mai devreme este mai mic ca si prioritate fata de cel din stiva
         Returneaza 1 daca semnul extras e mai mic in prioritate altfel returneaza 0
      */
+
     public static int GradSemn(char semn){
         switch (semn) {
             case ')': case '(': return 0;
@@ -64,8 +72,62 @@ public class Calculator extends JFrame {
         }
     }
 
-    public static StringBuilder FormaPoloneza(String expresiaInfixata){
+    /*
+        Evalueaza forma poloneza si returneaza tot string sa poata fi afisat pe calculator
 
+     parcurgi expresie de la stanga la dr ca nu am dat return la rezultat.reverse()
+        numerele le pui in stack iar cand gasesti un semn iei din stack 2 numere primul fiind A iar nd B
+        si faci operatia aferenta dupa pui inapoi in stack
+     */
+
+    public static String Operatie(char op,double n1,double n2){
+        String rez=new String();
+
+        switch (op){
+            case '+':
+                rez=String.valueOf(n1+n2);
+                break;
+            case '-':
+                rez=String.valueOf(n1-n2);
+                break;
+            case '*':
+                rez=String.valueOf(n1*n2);
+                break;
+            case '/':
+                rez=String.valueOf(n1/n2);
+                break;
+        }
+        return rez;
+    }
+
+    public static String EvaluareExpresie(String expresie){
+        String rez= "";
+        Stiva stack= new Stiva();
+
+        for(int i=0;i<=expresie.length()-1;i++){
+                char c=expresie.charAt(i);
+                if(Character.isDigit(c)) {
+                    stack.push(String.valueOf(c));
+                }else {
+                    char op=c;
+                    double n1,n2;
+                    n1=Double.parseDouble(stack.top());
+                    stack.pop();
+                    n2=Double.parseDouble(stack.top());
+                    stack.pop();
+                    rez=Operatie(op,n1,n2);
+                    stack.push(rez);
+                }
+        }
+
+        return rez;
+    }
+
+    /*
+        Construieste forma poloneza
+     */
+
+    public static StringBuilder FormaPoloneza(String expresiaInfixata){
         StringBuilder rezultat=new StringBuilder();
         Stiva stack=new Stiva();
 
@@ -97,7 +159,7 @@ public class Calculator extends JFrame {
             rezultat.append(stack.top());
             stack.pop();
         }
-        return rezultat.reverse();
+        return rezultat;
     }
 
     public Calculator() {
@@ -105,10 +167,11 @@ public class Calculator extends JFrame {
         JPanel buttonpanel = new JPanel();
         buttonpanel.setLayout(new FlowLayout());
 
-        for (int i=0;i<10;i++)
+        for (int i=0;i< digits.length;i++)
             buttonpanel.add(digits[i]);
 
-        for (int i=0;i<6;i++)
+
+        for (int i=0;i<operators.length;i++)
             buttonpanel.add(operators[i]);
 
         add(buttonpanel, BorderLayout.CENTER);
@@ -118,7 +181,7 @@ public class Calculator extends JFrame {
         area.setWrapStyleWord(true);
         area.setEditable(false);
 
-        for (int i=0;i<10;i++) {
+        for (int i=0;i<digits.length;i++) {
             int finalI = i;
             digits[i].addActionListener(new ActionListener() {
                 @Override
@@ -128,7 +191,7 @@ public class Calculator extends JFrame {
             });
         }
 
-        for (int i=0;i<6;i++){
+        for (int i=0;i<operators.length;i++){
             int finalI = i;
             operators[i].addActionListener(new ActionListener() {
                 @Override
@@ -137,19 +200,14 @@ public class Calculator extends JFrame {
                         area.setText("");
                     else
                     if (finalI == 4) {
-                        String lhs;
-                        String rhs;
+                        String expresie,exprPoloneza;
                         try {
 
-                            lhs = area.getText().substring(0, area.getText().indexOf(operator + ""));
-                            rhs = area.getText().substring(area.getText().indexOf(operator + "") + 1, area.getText().length());
-                            switch (operator) {
-                                case '+': area.append(" = " + ((Double.parseDouble(lhs) + Double.parseDouble(rhs)))); break;
-                                case '-': area.append(" = " + ((Double.parseDouble(lhs) - Double.parseDouble(rhs)))); break;
-                                case '/': area.append(" = " + ((Double.parseDouble(lhs) / Double.parseDouble(rhs)))); break;
-                                case '*': area.append(" = " + ((Double.parseDouble(lhs) * Double.parseDouble(rhs)))); break;
-                                default: area.setText(" "); break;
-                            }
+                            expresie=area.getText();
+                            exprPoloneza=String.valueOf(FormaPoloneza(expresie));
+
+                            area.setText(EvaluareExpresie(exprPoloneza));
+
                         } catch (Exception e) {
                             area.setText(" !!!Probleme!!! ");
                         }
