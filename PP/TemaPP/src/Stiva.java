@@ -20,7 +20,6 @@ public class Stiva {
     public static class Element{
         String data;
         Element next;
-
         public Element(String data){
             this.data=data;
         }
@@ -48,9 +47,7 @@ public class Stiva {
         if(!IsEmpty()) {
             varf=varf.next;
         }
-        else {
-            System.out.println("EGOALA nu pot pop");
-        }
+
     }
 
     public String top(){
@@ -58,7 +55,7 @@ public class Stiva {
             return varf.data;
         }
         else{
-            return "e goala nu pot da top";
+            return null;
         }
     }
 }

@@ -38,13 +38,66 @@ public class Calculator extends JFrame {
     JTextArea area = new JTextArea(3, 5);
 
     public static void main(String[] args) {
-        Calculator calculator = new Calculator();
-        calculator.setSize(230, 200);
-        calculator.setTitle(" Java-Calc-Extended, PP Lab1 ");
-        calculator.setResizable(false);
-        calculator.setVisible(true);
-        calculator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        Calculator calculator = new Calculator();
+//        calculator.setSize(230, 200);
+//        calculator.setTitle(" Java-Calc-Extended, PP Lab1 ");
+//        calculator.setResizable(false);
+//        calculator.setVisible(true);
+//        calculator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        System.out.println(FormaPoloneza("1+2/2+(2-3*4)"));
+
+
+    }
+
+
+    /*
+        Determina daca semnul extras mai devreme este mai mic ca si prioritate fata de cel din stiva
+        Returneaza 1 daca semnul extras e mai mic in prioritate altfel returneaza 0
+     */
+    public static int GradSemn(char semn){
+        switch (semn) {
+            case ')': case '(': return 0;
+            case '+': case '-': return 1;
+            case '*': case '/': return 2;
+            default: return -1;
+        }
+    }
+
+    public static StringBuilder FormaPoloneza(String expresiaInfixata){
+
+        StringBuilder rezultat=new StringBuilder();
+        Stiva stack=new Stiva();
+
+        for(int i=expresiaInfixata.length() -1 ;i>=0;i--) {
+            char c = expresiaInfixata.charAt(i);
+            // daca e cifra o pui direct
+            if(Character.isDigit(c)) {
+                rezultat.append(c);
+            }else if(c=='('){
+                while(!stack.IsEmpty() && !stack.top().equals(")")){
+                    rezultat.append(stack.top());
+                    stack.pop();
+                }
+                stack.pop();//scapi de )
+            }else {
+                if(!stack.IsEmpty() && GradSemn(c) < GradSemn(stack.top().charAt(0))){
+                    while (!stack.IsEmpty() && GradSemn(c) < GradSemn(stack.top().charAt(0))) {
+                        rezultat.append(stack.top());
+                        stack.pop();
+                        stack.push(String.valueOf(c));
+                    }
+                }
+                else{
+                    stack.push(String.valueOf(c));
+                }
+            }
+        }
+        while(!stack.IsEmpty()){
+            rezultat.append(stack.top());
+            stack.pop();
+        }
+        return rezultat.reverse();
     }
 
     public Calculator() {
