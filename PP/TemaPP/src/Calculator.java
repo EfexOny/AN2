@@ -51,7 +51,7 @@ public class Calculator extends JFrame {
 
 //        System.out.println(EvaluareExpresie(String.valueOf(FormaPoloneza("1+2/2+(2-3*4)"))));
 
-
+//2*(4-5/6)/456)
     }
 
 
