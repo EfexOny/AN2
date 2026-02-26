@@ -1,44 +1,25 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.util.Stack;
 
 
 
 public class Calculator extends JFrame {
-
-    JButton digits[] = {
-            new JButton(" 0 "), new JButton(" 1 "), new JButton(" 2 "),
-            new JButton(" 3 "), new JButton(" 4 "), new JButton(" 5 "),
-            new JButton(" 6 "), new JButton(" 7 "), new JButton(" 8 "),
-            new JButton(" 9 ")
-    };
-
-    JButton operators[] = {
-            new JButton(" + "), new JButton(" - "), new JButton(" * "),
-            new JButton(" / "), new JButton(" = "), new JButton(" C "),
-            new JButton(" ) "), new JButton(" ( ")
-    };
-
-    String oper_values[] = {"+", "-", "*", "/", "=", "", ")", "("};
+    JButton[] digits = new JButton[10];
+    JButton[] operators = new JButton[8];
+    String[] oper_values = {"+", "-", "*", "/", "=", "C", ")", "("};
     JTextArea area = new JTextArea(3, 5);
 
     public static void main(String[] args) {
         Calculator calculator = new Calculator();
         calculator.setSize(400, 500);
-        calculator.setTitle(" Java-Calc-Extended, PP Lab1 ");
-        calculator.setResizable(true);
+        calculator.setTitle("Java-Calc-Prefix (Forma Poloneza)");
         calculator.setVisible(true);
         calculator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    /**
-     * Returneaza precedenta operatorilor.
-     * Parantezele au prioritate 0 in interiorul stivei pentru a nu scoate alti operatori.
-     */
     public static int GradSemn(char semn) {
         switch (semn) {
             case '+': case '-': return 1;
@@ -59,53 +40,49 @@ public class Calculator extends JFrame {
     }
 
     /**
-     * Evalueaza expresia in forma postfixata (poloneza).
-     * Ordinea operanzilor: n2 este operandul din stanga, n1 cel din dreapta.
+     * Evalueaza Forma Poloneza (Prefix)
+     * Parcurgere: Dreapta -> Stanga
      */
     public static String EvaluareExpresie(String expresie) {
-        if (expresie.isEmpty()) return "";
         Stiva stack = new Stiva();
-
-        for (int i = 0; i < expresie.length(); i++) {
+        for (int i = expresie.length() - 1; i >= 0; i--) {
             char c = expresie.charAt(i);
             if (Character.isDigit(c)) {
                 stack.push(String.valueOf(c));
             } else {
-                if (stack.IsEmpty()) continue;
                 double n1 = Double.parseDouble(stack.top()); stack.pop();
-                if (stack.IsEmpty()) return String.valueOf(n1);
                 double n2 = Double.parseDouble(stack.top()); stack.pop();
-                stack.push(Operatie(c, n2, n1));
+                // In Prefix, n1 e primul operand, n2 al doilea
+                stack.push(Operatie(c, n1, n2));
             }
         }
         return stack.top();
     }
 
     /**
-     * Transforma infix in postfix
-     * Parcurgere standard de la stanga la dreapta.
+     * Transforma Infix in Forma Poloneza (Prefix)
      */
-    public static StringBuilder FormaPoloneza(String expresiaInfixata) {
+    public static String FormaPoloneza(String infix) {
         StringBuilder rezultat = new StringBuilder();
         Stiva stack = new Stiva();
 
-        for (int i = 0; i < expresiaInfixata.length(); i++) {
-            char c = expresiaInfixata.charAt(i);
+        String reversedInfix = new StringBuilder(infix).reverse().toString();
+
+        for (int i = 0; i < reversedInfix.length(); i++) {
+            char c = reversedInfix.charAt(i);
 
             if (Character.isDigit(c)) {
                 rezultat.append(c);
-            } else if (c == '(') {
-                stack.push(String.valueOf(c));
             } else if (c == ')') {
+                stack.push("(");
+            } else if (c == '(') {
                 while (!stack.IsEmpty() && !stack.top().equals("(")) {
                     rezultat.append(stack.top());
                     stack.pop();
                 }
-                if (!stack.IsEmpty()) stack.pop(); // Elimina "("
+                stack.pop();
             } else {
-                // Operator: scoate din stiva operatorii cu prioritate mai mare sau egala
-                while (!stack.IsEmpty() && !stack.top().equals("(") &&
-                        GradSemn(c) <= GradSemn(stack.top().charAt(0))) {
+                while (!stack.IsEmpty() && GradSemn(c) < GradSemn(stack.top().charAt(0))) {
                     rezultat.append(stack.top());
                     stack.pop();
                 }
@@ -116,45 +93,46 @@ public class Calculator extends JFrame {
             rezultat.append(stack.top());
             stack.pop();
         }
-        return rezultat;
+        //Rezultatul final se inverseaza din nou
+        return rezultat.reverse().toString();
     }
 
     public Calculator() {
+        setLayout(new BorderLayout());
         add(new JScrollPane(area), BorderLayout.NORTH);
-        JPanel buttonpanel = new JPanel();
-        buttonpanel.setLayout(new FlowLayout());
-
-        for (JButton b : digits) buttonpanel.add(b);
-        for (JButton b : operators) buttonpanel.add(b);
-
-        add(buttonpanel, BorderLayout.CENTER);
-        area.setLineWrap(true);
-        area.setWrapStyleWord(true);
         area.setEditable(false);
 
-        // ActionListeners pentru cifre
-        for (int i = 0; i < digits.length; i++) {
-            int finalI = i;
-            digits[i].addActionListener(e -> area.append(Integer.toString(finalI)));
+        JPanel buttonpanel = new JPanel(new FlowLayout());
+        for (int i = 0; i < 10; i++) {
+            digits[i] = new JButton(" " + i + " ");
+            int val = i;
+            digits[i].addActionListener(e -> area.append(String.valueOf(val)));
+            buttonpanel.add(digits[i]);
         }
 
         for (int i = 0; i < operators.length; i++) {
-            int finalI = i;
-            operators[i].addActionListener(e -> {
-                if (finalI == 5) { // Butonul 'C'
-                    area.setText("");
-                } else if (finalI == 4) { // Butonul '='
-                    try {
-                        String infix = area.getText();
-                        String postfix = FormaPoloneza(infix).toString();
-                        area.setText(EvaluareExpresie(postfix));
-                    } catch (Exception ex) {
-                        area.setText(" Eroare ");
-                    }
-                } else { // Operatori si paranteze
-                    area.append(oper_values[finalI]);
-                }
-            });
+            operators[i] = new JButton(oper_values[i]);
+            int index = i;
+            operators[i].addActionListener(e -> handleOperator(index));
+            buttonpanel.add(operators[index]);
+        }
+        add(buttonpanel, BorderLayout.CENTER);
+    }
+
+    private void handleOperator(int index) {
+        String val = oper_values[index];
+        if (val.equals("C")) {
+            area.setText("");
+        } else if (val.equals("=")) {
+            try {
+                String infix = area.getText();
+                String prefix = FormaPoloneza(infix);
+                area.setText(EvaluareExpresie(prefix));
+            } catch (Exception ex) {
+                area.setText("Eroare");
+            }
+        } else {
+            area.append(val);
         }
     }
 }
