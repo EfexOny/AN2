@@ -32,13 +32,6 @@
         </dependency>
         <dependency>
             <groupId>org.graalvm.polyglot</groupId>
-            <artifactId>python</artifactId>
-            <version>25.0.2</version>
-            <type>pom</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.graalvm.polyglot</groupId>
             <artifactId>ruby</artifactId>
             <version>25.0.0</version>
             <type>pom</type>
@@ -51,8 +44,41 @@
             <type>pom</type>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.knowm.xchart</groupId>
+            <artifactId>xchart</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.polyglot</groupId>
+            <artifactId>python</artifactId>
+            <version>25.0.2</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.graalvm.python</groupId>
+                <artifactId>graalpy-maven-plugin</artifactId>
+                <version>25.0.2</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <packages>
+                                <package>numpy</package>
+                                <package>scipy</package>
+                                <package>matplotlib</package>
+                            </packages>
+                        </configuration>
+                        <goals>
+                            <goal>process-graalpy-resources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     <!-- ################## -->
 
 </project>
