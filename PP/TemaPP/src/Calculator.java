@@ -65,8 +65,11 @@ public class Calculator extends JFrame {
     public static String FormaPoloneza(String infix) {
         StringBuilder rezultat = new StringBuilder();
         Stiva stack = new Stiva();
+        //(4+2)/5
+        //
 
         String reversedInfix = new StringBuilder(infix).reverse().toString();
+        System.out.println(reversedInfix);
 
         for (int i = 0; i < reversedInfix.length(); i++) {
             char c = reversedInfix.charAt(i);
