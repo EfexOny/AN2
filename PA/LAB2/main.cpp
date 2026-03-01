@@ -11,52 +11,81 @@ struct pachet{
     lista *primul,*ultimul;
 };
 
-void inserare(lista* &cap, int valoare) {
-    lista* nou = new lista;
-    nou->data = valoare;
-    nou->urm = nullptr;
+/*
 
-    if (cap == nullptr) {
-        cap = nou;
-        return;
-    }
+    elem1->elem2->nullptr
 
-    lista* temp = cap;
-    while (temp->urm != nullptr) {
-        temp = temp->urm;
+*/
+//inserezi la sfarsit
+void inserare(pachet *l,int data){
+    lista *nou=new lista;
+    nou->data=data;
+    nou->urm=nullptr;
+    if(l->primul==nullptr){
+        l->primul=nou;
+        l->ultimul=nou;
+    }else{
+        l->ultimul->urm=nou;
+        l->ultimul=nou;
     }
-    temp->urm = nou;
 }
 
-
-void stergere(lista* &cap) {
-    if (cap == nullptr) {
-        return; 
-    }
-
-    lista* temp = cap;
-    cap = cap->urm;
-    delete temp;
+//stergi la inceput
+void sterge(pachet *l){
+    lista *del=l->primul;
+    l->primul=l->primul->urm;
+    delete del;
 }
 
-void afisare(lista* cap) {
-    lista* temp = cap;
-    while (temp != nullptr) {
-        std::cout << temp->data << " -> ";
-        temp = temp->urm;
+void afisare(pachet *l){
+    lista *parc=l->primul;
+    while(parc->urm){
+        std::cout<<parc->data<<" ";
+        parc=parc->urm;
     }
-    std::cout << "NULL" << std::endl;
-}
-
-int top(lista* cap) {
-    if (cap != nullptr) {
-            return cap->data;
-    }
-    return -200;
+    std::cout<<parc->data<<" ";
 }
 
 int main(){
+    pachet *l=new pachet;
+    pachet *r=new pachet[10];
+    l->primul=l->ultimul=nullptr;
 
-    
+    inserare(l,2);
+    inserare(l,42);
+    inserare(l,300);
+    inserare(l,239);
+    inserare(l,42);
+    inserare(l,55);
+    inserare(l,68);
+    inserare(l,32);
+
+    int m=3;
+
+    for(int p=0;p<m;p++){
+
+        for(int i = 0; i < 10; i++) {
+            r[i].primul = r[i].ultimul = nullptr;
+        }
+
+        while(l->primul){
+            int nr=l->primul->data;
+            int lastCifra = int(nr/pow(10,p))%10;
+            inserare(&r[lastCifra],nr);
+            sterge(l);
+        }
+
+        for(int i=0;i<10;i++){
+            lista *pa=r[i].primul;
+            while(pa){
+                inserare(l,pa->data);
+                pa=pa->urm;
+            }
+        }
+
+
+    }
+
+    afisare(l);
     return 0;
 }
