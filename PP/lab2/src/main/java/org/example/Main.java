@@ -132,7 +132,7 @@ public class Main {
             if(sumaControl[i].inceput !=null){
                 System.out.println("\n i: "+ i +" cuvinte= ");
                 nod parc= sumaControl[i].inceput;
-                while(parc!=null){
+                while(parc != null){
                     System.out.print(parc.cuv + " ");
                     parc=parc.urm;
                 }
@@ -209,7 +209,8 @@ rez = binom.cdf(x,nr,0.5)
 print(rez)
 
 """;
-        Value genBinomial = polyglot.eval("python", citesteAruncariPY);
+        polyglot.eval("python", citesteAruncariPY);
+
         ctxJS.close();
         polyglot.close();
     }
