@@ -1,7 +1,9 @@
 package org.example
 
 import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
@@ -9,12 +11,18 @@ import java.io.File
 import kotlin.test.assertFalse
 
 
+
+
 @RunWith(Parameterized::class)
-class Ex4(
+class Lab3Ex4(
     private val tecst : String ,
     private val expectedTecst: String,
     private val shouldMatch: Boolean,
     ) {
+
+    @get:Rule
+    val tempFolder = TemporaryFolder()
+
     companion object {
         @JvmStatic
         @Parameters
@@ -92,8 +100,10 @@ class Ex4(
         }
         val adev = traducerea.joinToString(" ") + ". "
 
-        File("traducere.txt").writeText(adev)
-        File("").walk().filter { it.name.equals("traducere.txt") }  
+        val testFile = tempFolder.newFile("traducere.txt")
+        testFile.writeText(adev)
+
+        assertTrue("Fișierul nu a fost creat", testFile.exists())
 
         if(shouldMatch){
             assertTrue(adev.equals(expectedTecst))
