@@ -62,6 +62,8 @@ fun tema1() {
         items
     )
 
+
+
     println("--- titlu: ${allData.title} ---")
     for (element in allData.items) {
         println("--- titlu: ${element.title} ---")
