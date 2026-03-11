@@ -38,7 +38,9 @@ class Content(
 
 }
 
-open class Book(var data : Content){
+open class Book(
+    var data : Content,
+    ){
     public override fun toString() : String {
         return super.toString()
     }
@@ -67,8 +69,12 @@ open class Book(var data : Content){
     public fun isPublishedBy(publicant : String) : Boolean{
         return data.getPublisher().contains(publicant)
     }
+}
 
-
+class CarteCuPret(
+    data : Content,
+    var price : Double,
+) : Book(data){
 }
 
 class Library(var books : Set<Book>) {
@@ -112,13 +118,13 @@ class Library(var books : Set<Book>) {
 
 class LibraryPrinter( ) {
     public fun printBooksRaw(carti : Set<Book>){
-
+//        cod
     }
     public fun printHTML(carti : Set<Book>){
-
+//        cod
     }
     public fun printJSON(carti : Set<Book>){
-
+//        cod
     }
 }
 
