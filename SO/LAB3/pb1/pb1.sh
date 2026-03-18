@@ -7,5 +7,9 @@ then
 fi
 
 
-echo $#
+vector=("$@")
 
+for (( i = $#; i>=0 ; i--));
+do 
+	echo "${vector[i]}"
+done

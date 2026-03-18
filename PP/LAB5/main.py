@@ -1,9 +1,3 @@
-# instructiuni:
-# 1. install uv
-# 2. (in folderul de proiect): uv init
-# 3. uv add pyside6
-# 4. se face app.ui cu qt designer (uv run pyside6-designer) -> salvam ca "app.ui"
-# 4. (in vscode cu extensia python): 
 
 import os
 import sys
@@ -11,15 +5,28 @@ import sqlite3
 
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
-from PySide6.QtWidgets import QApplication, QPushButton
+from PySide6.QtWidgets import QApplication, QPushButton, QLineEdit,QTextBrowser,QStatusBar
 
-
-def searchButton_clicked():
-    print("click!!!")
+def ceva(text):
+    print(text)
 
 
 def main():
 
+    def filterOdd(list):
+        return 
+
+    def filterPrimes(list):
+        return list
+
+    
+    def sumNumbers(list):
+        return list
+    
+    def setText(textToSet):
+        rezultat.setText(textToSet)
+
+        
     loader = QUiLoader()
     app = QApplication(sys.argv)
 
@@ -28,16 +35,24 @@ def main():
     window = loader.load(ui_file)
     ui_file.close()
 
-    # work with widgets
+    addButton = window.findChild(QPushButton, "butonAdd")
+    filterOddButton = window.findChild(QPushButton, "filterOdd")
+    filterPrimesButton = window.findChild(QPushButton, "filterPrimes")
+    sumNumberButton = window.findChild(QPushButton, "sumNumber")
 
-    # find button by name (given from designer)
-    button = window.findChild(QPushButton, "searchButton")
-    button.clicked.connect(searchButton_clicked)
+    baraAdd = window.findChild(QLineEdit, "numereAdd")
+    rezultat = window.findChild(QTextBrowser,"rezultatLista")
 
-    # show window and start application
+    filterOddButton.clicked.connect(filterOdd)
+    filterPrimesButton.clicked.connect(filterPrimes)
+    sumNumberButton.clicked.connect(sumNumbers)
+
+
+
     window.show()
     app.exec()
 
 
 if __name__ == "__main__":
     main()
+
