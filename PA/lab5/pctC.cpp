@@ -18,7 +18,7 @@ struct heap{
 
 void inserare(arbore *arb, heap *h){
     h->h[h->last] = arb;
-    int curent = h->last;
+    int curent = h->last;   
     int parinte = curent / 2;
 
     while(curent > 1 && h->h[curent]->data < h->h[parinte]->data){
@@ -74,14 +74,21 @@ void lep(heap *l){
     }
 }
 
+void preordArbore(arbore *arb){
+    if(!arb){
+        return;
+    }
+    std::cout<<arb->data<<" ";
+    preordArbore(arb->stg);
+    preordArbore(arb->dr);
+}
 
 int main(){
    heap *l = new heap;
     l->last = 1;
 
     arbore *a1, *a2, *a3, *a4, *a5;
-    a1 = new arbore; a2 = new arbore; a3 = new arbore;
-    a4 = new arbore; a5 = new arbore;
+    a1 = new arbore; a2 = new arbore; a3 = new arbore;a4 = new arbore; a5 = new arbore;
 
     a1->data = 15; a1->stg = a1->dr = nullptr;
     a2->data = 5;  a2->stg = a2->dr = nullptr;
@@ -102,6 +109,9 @@ int main(){
     for(int i=1;i<l->last;i++)
         std::cout<<l->h[i]->data<<" ";
     std::cout<<std::endl;
+
+    preordArbore(l->h[1]);
+
 
     return 0;
 }
