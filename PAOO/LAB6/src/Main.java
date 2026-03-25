@@ -86,23 +86,25 @@ class Caroserie2 extends AbstractCaroserie{
 
 
 class FactoryMaker{
-    private static FactoryMaker instance = null;
     private static AbstractFactory pfactory=null;
 
+//in plus
+private static FactoryMaker instance = null;
+
 //    constr privat
-    private FactoryMaker () {
-
-    }
-
-    public static FactoryMaker getInstance(){
-        if(instance != null){
-            return instance;
-        }else{
-            instance = new FactoryMaker();
-        }
-        return instance;
-    }
-
+//    private FactoryMaker () {
+//
+//    }
+//
+//    public static FactoryMaker getInstance(){
+//        if(instance != null){
+//            return instance;
+//        }else{
+//            instance = new FactoryMaker();
+//        }
+//        return instance;
+//    }
+//
     static AbstractFactory getFactory(String opt){
         if(opt.equals("a")){
             pfactory = new Fabrica1();
@@ -122,7 +124,7 @@ public class Main {
         Vector<AbstractMotoare> v1 = new Vector<>() ;
         Vector<AbstractCaroserie> v2 = new Vector<>();
 
-        FactoryMaker fm = FactoryMaker.getInstance();
+        FactoryMaker fm = new FactoryMaker();
 
         AbstractFactory pf1 = fm.getFactory("a");
         AbstractFactory pf2 = fm.getFactory("b");
