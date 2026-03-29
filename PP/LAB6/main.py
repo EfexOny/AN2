@@ -1,14 +1,9 @@
+from clase import *
 
-vector = list[int]
-
-def scale(scalar: float, vector: vector) -> vector:
-    return [scalar * num for num in vector]
 
 def main():
-    v =[1.0, -4.2, 5.4]
-    u=scale(0.5,v)
-    print(u)
+    pass
 
-if __name__ == "__name__":
+
+if __name__ == "__main__":
     main()
-

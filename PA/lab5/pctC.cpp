@@ -10,7 +10,6 @@ struct arbore{
 
 // lista de arbori
 
-
 struct heap{
     arbore *h[100];
     int last;
