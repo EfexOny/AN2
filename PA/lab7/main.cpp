@@ -2,7 +2,6 @@
 
 using namespace std;
 
-
 struct element {
     int greutate;
     int profit;
@@ -24,15 +23,15 @@ p = {10,30,20}
 s={(0,0)}
 t={(3,10)}
 
-iteratia 1 :
+iteratia 0 :
     s1={(0,0),(3,10)}
     t1={(5,30),(8,40)}
 
-iteratia 2:
+iteratia 1:
     s2={(0,0),(3,10),(5,30),(8,40)} 
     t2={(6,20),(9,30),(11,50),(14,60)} -> elem viit + elem din s2
 
-iteratia 3:
+iteratia 2:
     s3={(0,0),(3,10),(5,30),(8,40),(6,20)}
     t3={}
 
@@ -64,6 +63,9 @@ lista* interclasare(lista *S, lista *T,int greutate){
         lista *add2=new lista{new element{parcT->data->greutate,parcT->data->profit},nullptr};
 
         if(add1->data->greutate <= add2->data->greutate){
+
+            // verifici si profitabilitatea
+
             coada->next=add1;   
             coada=coada->next;
             parcS=parcS->next;
@@ -90,8 +92,10 @@ lista* interclasare(lista *S, lista *T,int greutate){
         coada=coada->next;
         parcT=parcT->next;
     }
+
     lista *prev=ret;
     lista *parcRet=ret->next;
+
     int max=-1;
     while(parcRet){   
         
@@ -125,11 +129,18 @@ void rucscac(int M,int n,int w[],int p[],int x[]){
     lista **S = new lista*[n];
     lista **T = new lista*[n];
 
+
+
+
     S[0] = new lista{new element{0, 0}, nullptr};
     T[0] = new lista{new element{w[0],p[0]},nullptr};
 
     for(int i=1;i<n;i++){
+
+
         S[i] = interclasare(S[i-1],T[i-1],M);
+
+        afisare(S[i]);
 
         element *scos = new element{w[i],p[i]};
         
@@ -145,7 +156,7 @@ void rucscac(int M,int n,int w[],int p[],int x[]){
             
             if(T[i]==nullptr){
                 T[i]=add;
-            }else{
+            }else {
                 lista *parcT=T[i];
                 while(parcT->next){
                     parcT=parcT->next;
@@ -153,10 +164,15 @@ void rucscac(int M,int n,int w[],int p[],int x[]){
                 parcT->next=add;
             }
             parc=parc->next;
-        }   
+        }
+        cout<<endl<<"Iteratia:"<<i<<endl;
+        afisare(S[i]);
+        afisare(T[i]);   
     }
 
     lista *final = interclasare(S[n-1], T[n-1], M);
+    cout<<endl<<"Rezultat final"<<endl;
+    afisare(final);
 
     // cout<<" "<<endl;
     // for(int i=0;i<n;i++){
@@ -170,6 +186,7 @@ void rucscac(int M,int n,int w[],int p[],int x[]){
     while (parc->next) parc = parc->next;
     int greutateProv = parc->data->greutate;
     int profitProv = parc->data->profit;
+
     cout << "Profit maxim: " << profitProv << endl;
     for (int i = n-1; i >= 0; i--) {
         if (exista(S[i], greutateProv, profitProv)) {
