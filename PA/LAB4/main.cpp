@@ -54,6 +54,7 @@ int main(){
     auto end = chrono::high_resolution_clock::now();
     cout << "Random: " << chrono::duration_cast<chrono::microseconds>(end - start).count() << "us" << endl;
 
+
     start = chrono::high_resolution_clock::now();
     BatcherSort(vector2, 0, n, 0);
     end = chrono::high_resolution_clock::now();
