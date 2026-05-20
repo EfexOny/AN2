@@ -37,7 +37,7 @@ void dijkstra(int i0){
     //luam nodu cu cea mai mica distanta din D si nu a fost vizitat
     for(int i = 0; i < n - 1; i++){
         int k = -1;
-        int minDist = INF;
+        int minDist = INF;  
         for(int j = 0; j<n; j++){
             if(!S[j] && D[j] < minDist){
                 minDist = D[j];
@@ -84,11 +84,15 @@ int main(){
 
     L[0][1] = 6;
     L[0][3] = 1;
+
     L[1][4] = 4; 
     L[1][2] = 5; 
+
     L[2][4] = 5;
+
     L[3][4] = 1;
     L[3][1] = 2;
+    
     L[4][1] = 2;
 
 
