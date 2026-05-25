@@ -1,0 +1,44 @@
+ fastfetch --logo/Downloads/ratonsmk.png
+  643  fastfetch --logo /Downloads/ratonsmk.png
+  644  ls
+  645  fastfetch -l Downloads
+  646  fastfetch -l Downloads/ratonsmk.png
+  647  clear
+  648  sudo apt install swi-prolog
+  649  clear
+  650  sudo apt install swi-prolog
+  651  clear
+  652  uv init
+  653  uv venv
+  654  source .venv/bin/activate
+  655  uv sync
+  656  uv run p1.py
+  657  uv addA
+  658  uv add pyswip
+  659  uv run p1.py
+  660  CLEAR
+  661  clear
+  662  uv run p1.py
+  663  cd ..
+  664  ls
+  665  git clone https://github.com/tuiasi-lab/tuiasi-pp-lab14-EfexOny.git
+  666  cd tuiasi-pp-lab14
+  667  ls
+  668  cd tuiasi-pp-lab14-EfexOny/
+  669  code .
+  670  uv sync
+  671  clear
+  672  uv run pytest
+  673  uv add pyswip
+  674  uv sync
+  675  clear
+  676  uv run pytest
+  677  clear
+  678  uv run lab14/family.py
+  679  uv run pytest
+  680  uv sync --dev
+  681  uv run pytest
+  682  uv run tests/test_family.py
+  683  history
+  684  clear
+  685  history
