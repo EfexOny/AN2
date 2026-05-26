@@ -30,7 +30,7 @@ void read_from_file(char *comanda,char *fisier){
         i++;
     }
 
-    // buff[i]='\0';
+    buff[i]='\0';
     close(fd);
 
     strcpy(comanda,buff);
@@ -78,7 +78,11 @@ int main(int argc,char *argv[]){
             exit(EXIT_FAILURE);
         }
         if(nepot==0){
-            execlp(msg_primit.m_text,msg_primit.m_text,NULL);
+
+            char *dau_cai[] = { msg_primit.m_text, NULL};
+            execvp(dau_cai[0],dau_cai);
+
+            exit(EXIT_SUCCESS);
         }
 
     }else if(copil > 0){ //proces parinte
