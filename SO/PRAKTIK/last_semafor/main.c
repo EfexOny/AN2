@@ -4,7 +4,8 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/wait.h>
-#include <sys/mman.h>
+#include <sys/shm.h>
+#include <sys/stat.h>
 #include "hdr.h"
 
 #define KEY 1928
@@ -49,9 +50,12 @@ int main(void){
 
 
     int semid=initsem(KEY);
+
+    int *inc;
     
-    int *inc = mmap(NULL,sizeof(int),PROT_WRITE | PROT_READ,MAP_SHARED | MAP_ANONYMOUS,-1,0);
-    *inc=0;
+    int segment_id = shmget (IPC_PRIVATE, sizeof(int), IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
+
+    inc = (int *) shmat(segment_id,0,0);
 
     pid_t copil = fork();
     if(copil==-1){
@@ -92,7 +96,6 @@ int main(void){
 
     printf("%d",*inc);
 
-    munmap(inc,sizeof(int));
     semctl(semid, 0, IPC_RMID);
 
     return 0;
